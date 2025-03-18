@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: dsp-clone-job-codegenagain-gitops
+spec:
+  template:
+    metadata:
+      name: dsp-clone-job-codegenagain-gitops
+    spec:
+      serviceAccountName: codegenagain-dsp-job
+      containers:
+        - name: initialize-dsp
+          image: quay.io/redhat-ai-dev/utils:latest
+          command:
+            - /bin/bash
+            - -c
+            - |
+              NS=$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)
+              oc wait -l statefulset=codegenagain-notebook --for=condition=ready pod --timeout=300s
+              oc exec  StatefulSet/codegenagain-notebook -- git clone https://github.com/rhdh-pai-qe/codegen2
+      restartPolicy: Never

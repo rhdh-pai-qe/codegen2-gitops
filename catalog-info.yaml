@@ -1,0 +1,22 @@
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: codegenagain-gitops
+  description: This is GitOps manifest for codegenagain   
+  links:
+    - url: https://www.redhat.com/en/solutions/trusted-software-supply-chain
+      title: Trusted Secure Supply Chain 
+      icon: dashboard
+      type: admin-dashboard
+  annotations:
+    # ArgoCD apps from this template used rhtap-gitops as the grouping
+    argocd/app-selector: rhtap/gitops=codegenagain
+    janus-idp.io/tekton: codegenagain 
+    backstage.io/kubernetes-id: codegenagain 
+    backstage.io/techdocs-ref: dir:. 
+spec:
+  type: gitops
+  owner: user:guest 
+  lifecycle: experimental
+  dependsOn:
+    - component:codegenagain  
